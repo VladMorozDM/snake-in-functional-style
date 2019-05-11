@@ -27,6 +27,7 @@ const firstState = () => ({
 const computeNextState = (state )=> {
     const prevState = JSON.parse( JSON.stringify(state) );
     const foundApple = () => head.x === prevState.apple.x && head.y === prevState.apple.y;
+    // TODO: - compute crash
     const reviewTail = () => {
         if( foundApple() ){
             return [ {...prevState.head}, ...prevState.tail ]
@@ -40,6 +41,7 @@ const computeNextState = (state )=> {
         x: prevState.head.x + directions[prevState.direction].x*5,
         y: prevState.head.y + directions[prevState.direction].y*5
     };
+    // TODO: - compute lefting borders
     const tail = reviewTail();
     const apple = foundApple() ? getApple() : {...prevState.apple};
     const newState = {
@@ -50,5 +52,5 @@ const computeNextState = (state )=> {
            };
     return newState
 };
-const setNextDirection = ( state, newDirection)=> ({ ...state, direction: newDirection});
+
 
