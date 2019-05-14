@@ -1,7 +1,4 @@
 "use strict";
-/**
- * Created by vlad on 11.05.2019.
- */
 const directions ={
     EAST: { x:1, y:0 },
     WEST: { x:-1, y:0},
@@ -31,15 +28,13 @@ const computeNextState = ( state )=> {
     const reviewTail = ( state ) => {
         if( foundApple( head, { x: appleX, y: appleY }) ){
             return [ {...state.head}, ...state.tail ]
-        }else if( state.tail.length){
+        }else {
             return  [ {...state.head}, ...state.tail.slice(0, -1) ]
-        }else{
-            return state.tail
         }
     };
-    const leftedX = (head.x > 100 ? head.x = 0 : false) || (head.x < 0 ? head.x = 100 : false) ;
+    const leftedX = (head.x > 100 ? head.x = 5 : false) || (head.x < 5 ? head.x = 100 : false) ;
     head.x = leftedX ? leftedX : head.x;
-    const leftedY = (head.y > 100 ? head.y = 0 : false) || (head.y < 0 ? head.y = 100 : false) ;
+    const leftedY = (head.y > 100 ? head.y = 5 : false) || (head.y < 5 ? head.y = 100 : false) ;
     head.y = leftedY ? leftedY : head.y;
     const tail = reviewTail( prevState );
     const computeCrash = ( tail ) => tail.filter( cube => head.x === cube.x && head.y === cube.y ).length;

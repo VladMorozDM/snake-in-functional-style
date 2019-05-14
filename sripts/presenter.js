@@ -29,12 +29,13 @@ const draw = ( newState ) => {
     if( newState.crashed ) {
         ctx.fillStyle = 'rgb(255,0,0)';
         return Promise.all([  ...newState.tail ]
-                        .map( (cube, i) => delay(150*(i+1)).then( ()=> ctx.fillRect(x1(cube), y1(cube), x2, y2) ) )
+                        .map( (cube, i) => delay(50*(i+1)).then( ()=> ctx.fillRect(x1(cube), y1(cube), x2, y2) ) )
             )
-            .then( () => delay(100) )
-            .then( () => {
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        });
+            .then( () => delay(1000) )
+            .then( () => { ctx.fillRect(150, 150, canvas.width-300, canvas.height-300); return delay(700) })
+            .then( () => { ctx.fillRect(100, 100, canvas.width-200, canvas.height-200); return delay(700) })
+            .then( () => { ctx.fillRect(50, 50, canvas.width-100, canvas.height-100); return delay(700) })
+            .then( () => { ctx.fillRect(0, 0, canvas.width, canvas.height); return delay(700) })
     }
     return Promise.resolve()
 };
@@ -57,13 +58,29 @@ const step = () => {
             draw( newState ).then(() => delay(100)).then(() => step())
         }
 };
-draw(STATE);
-delay(100).then( () => step() );
+draw(STATE).then( () => step() );
+const isFalid =  direction => {
+    switch(direction){
+        case "NORTH":
+            STATE.direction = STATE.direction !== "SOUTH" ? direction : STATE.direction;
+            break;
+        case "SOUTH":
+            STATE.direction = STATE.direction !== "NORTH" ? direction : STATE.direction;
+            break;
+        case "WEST":
+            STATE.direction = STATE.direction !== "EAST" ? direction : STATE.direction;
+            break;
+        case "EAST":
+            STATE.direction = STATE.direction !== "WEST" ? direction : STATE.direction;
+            break;
+    }
+
+} ;
 window.addEventListener('keydown', e => {
     switch (e.key) {
-        case 'w': case'ц': case 'h':case'р': case 'ArrowUp':    STATE.direction = "NORTH"; break;
-        case 'a': case'ф': case 'j':case'о': case 'ArrowLeft':  STATE.direction = "WEST"; break;
-        case 's': case'ы': case 'k':case'л': case 'ArrowDown':  STATE.direction = "SOUTH"; break;
-        case 'd': case'в': case 'l':case'д': case 'ArrowRight': STATE.direction = "EAST";  break
+        case 'w': case'ц': case 'h':case'р': case 'ArrowUp':   isFalid("NORTH"); break;
+        case 'a': case'ф': case 'j':case'о': case 'ArrowLeft':  isFalid("WEST"); break;
+        case 's': case'ы': case 'k':case'л': case 'ArrowDown':  isFalid("SOUTH"); break;
+        case 'd': case'в': case 'l':case'д': case 'ArrowRight': isFalid("EAST");  break
     }
 });
